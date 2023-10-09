@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,11 +20,15 @@ public class HomeController {
 
         var cookieMap = Stream.of(request.getCookies())
                               .collect(Collectors.toMap(Cookie::getName, Function.identity()));
-
-        var idmsToken = cookieMap.get("idms-token").getValue();
         log.info("Cookie names: {}", cookieMap.keySet());
 
-        log.info("IDMS token: {}", idmsToken);
+        var idmsTokenCookie = cookieMap.get("IDMS_TOKEN");
+
+        if (Objects.nonNull(idmsTokenCookie)) {
+            log.info("IDMS token: {}", idmsTokenCookie.getValue());
+        } else {
+            log.info("Missing IDMS_TOKEN cookie");
+        }
 
         return "Web App Home Page";
     }
