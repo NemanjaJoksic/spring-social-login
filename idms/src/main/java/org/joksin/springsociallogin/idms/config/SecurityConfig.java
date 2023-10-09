@@ -6,6 +6,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.session.MapSessionRepository;
+import org.springframework.session.SessionRepository;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 @EnableWebSecurity
@@ -14,9 +18,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                           .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+                           .authorizeHttpRequests(auth -> auth.requestMatchers("/api/sessions/*").permitAll().anyRequest().authenticated())
                            .oauth2Login(httpSecurityOAuth2LoginConfigurer -> {})
                            .build();
+    }
+
+    @Bean
+    public SessionRepository<?> sessionRepository() {
+        return new MapSessionRepository(new ConcurrentHashMap<>());
     }
 
 }

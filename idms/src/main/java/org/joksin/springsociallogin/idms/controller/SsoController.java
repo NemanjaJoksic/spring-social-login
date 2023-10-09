@@ -16,8 +16,8 @@ public class SsoController {
 
     @SneakyThrows
     @GetMapping("/sso")
-    public void home(@RequestParam String redirectTo, HttpSession httpSession, HttpServletResponse response) {
-        log.info("Processing session ID: {}", httpSession.getId());
+    public void home(@RequestParam String redirectTo, HttpSession session, HttpServletResponse response) {
+        log.info("Processing session ID: {}", session.getId());
         log.info("Redirecting to: {}", redirectTo);
         response.sendRedirect(redirectTo);
     }
