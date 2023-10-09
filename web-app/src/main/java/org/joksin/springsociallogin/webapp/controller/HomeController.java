@@ -24,13 +24,15 @@ public class HomeController {
 
         var idmsTokenCookie = cookieMap.get("IDMS_TOKEN");
 
+        String tokenValue = null;
         if (Objects.nonNull(idmsTokenCookie)) {
-            log.info("IDMS token: {}", idmsTokenCookie.getValue());
+            tokenValue = idmsTokenCookie.getValue();
+            log.info("IDMS token: {}", tokenValue);
         } else {
             log.info("Missing IDMS_TOKEN cookie");
         }
 
-        return "Web App Home Page";
+        return "Web App Home Page. Token: " + tokenValue;
     }
 
 }
