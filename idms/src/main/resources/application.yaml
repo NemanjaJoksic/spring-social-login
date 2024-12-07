@@ -3,7 +3,7 @@ server:
   servlet:
     session:
       cookie:
-        name: IDMS_TOKEN
+        name: IDMSSESSIONID
 
 spring:
   security:
