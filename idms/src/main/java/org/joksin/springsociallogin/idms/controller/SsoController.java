@@ -1,5 +1,6 @@
 package org.joksin.springsociallogin.idms.controller;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -13,10 +14,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @AllArgsConstructor
 public class SsoController {
 
-    @SneakyThrows
-    @GetMapping("/sso")
-    public void home(@RequestParam String redirectTo, HttpServletResponse response) {
-        log.info("Redirecting to: {}", redirectTo);
-        response.sendRedirect(redirectTo);
-    }
+  @SneakyThrows
+  @GetMapping("/sso")
+  public void home(@RequestParam String redirectTo, HttpServletResponse response) {
+    log.info("Redirecting to: {}", redirectTo);
+
+    var cookie = new Cookie("token", "12345");
+    cookie.setHttpOnly(true);
+    cookie.setSecure(true);
+    cookie.setDomain("local.com");
+
+    response.addCookie(cookie);
+
+    response.sendRedirect(redirectTo);
+  }
 }
