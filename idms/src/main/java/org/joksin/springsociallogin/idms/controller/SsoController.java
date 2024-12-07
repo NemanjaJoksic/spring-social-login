@@ -1,7 +1,6 @@
 package org.joksin.springsociallogin.idms.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -18,13 +17,16 @@ public class SsoController {
 
     @SneakyThrows
     @GetMapping("/sso")
-    public void home(@RequestParam String redirectTo, HttpSession session, HttpServletResponse response,
-                     @AuthenticationPrincipal OAuth2User user) {
-        log.info("Processing session ID: {}", session.getId());
+    public void home(@RequestParam String redirectTo, HttpServletResponse response) {
         log.info("Redirecting to: {}", redirectTo);
+        response.sendRedirect(redirectTo);
+    }
 
-        session.setAttribute("user", user.getAttributes());
-
+    @SneakyThrows
+    @GetMapping("/token")
+    public void token(@RequestParam String redirectTo, HttpServletResponse response, @AuthenticationPrincipal OAuth2User user) {
+        redirectTo = redirectTo + "?token=" + user.getAttribute("email");
+        log.info("Redirecting to: {}", redirectTo);
         response.sendRedirect(redirectTo);
     }
 
